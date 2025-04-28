@@ -1784,4 +1784,3 @@ def run_full_pipeline_generator(input_directory, output_directory, generate_note
         excluded_dirs=excluded_dirs
     )
     print("(10/10) All done")
-    

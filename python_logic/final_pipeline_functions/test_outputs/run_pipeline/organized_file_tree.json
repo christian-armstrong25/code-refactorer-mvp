@@ -1,0 +1,65 @@
+{
+    "name": "weather_sample_directory",
+    "children": [
+        {
+            "name": "data",
+            "children": [
+                {
+                    "name": "raw",
+                    "children": [
+                        {
+                            "name": "weather.csv",
+                            "children": [],
+                            "is_directory": false
+                        }
+                    ],
+                    "is_directory": true
+                },
+                {
+                    "name": "processed",
+                    "children": [
+                        {
+                            "name": "weather_stats_final.csv",
+                            "children": [],
+                            "is_directory": false
+                        }
+                    ],
+                    "is_directory": true
+                }
+            ],
+            "is_directory": true
+        },
+        {
+            "name": "src",
+            "children": [
+                {
+                    "name": "weather_reading.py",
+                    "children": [],
+                    "is_directory": false
+                },
+                {
+                    "name": "weather_processing.py",
+                    "children": [],
+                    "is_directory": false
+                },
+                {
+                    "name": "stats_calculator.py",
+                    "children": [],
+                    "is_directory": false
+                },
+                {
+                    "name": "utils.py",
+                    "children": [],
+                    "is_directory": false
+                }
+            ],
+            "is_directory": true
+        },
+        {
+            "name": "README.txt",
+            "children": [],
+            "is_directory": false
+        }
+    ],
+    "is_directory": true
+}

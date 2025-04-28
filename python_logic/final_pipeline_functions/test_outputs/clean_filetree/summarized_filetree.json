@@ -1,0 +1,102 @@
+{
+    "name": "python_logic_tester",
+    "children": [
+        {
+            "name": "generate_summaries.py",
+            "file_summary": "The `generate_summaries.py` script is a Python utility designed for summarizing functions within Python scripts. It leverages the OpenAI API to analyze and return summaries of Python code functions. The main components of the script are as follows:\n\n1. **summarize_functions**: This function takes a string representation of Python code and uses the OpenAI API to summarize all functions within the provided code. It returns a JSON-encoded string containing the function names and their respective descriptions.\n\n2. **summarize_functions_in_directory**: This function navigates through a specified directory and identifies Python files. For each file, it reads the file content and uses the `summarize_functions` to generate function summaries. These summaries are then compiled into a dictionary with relative file paths as keys, and the result is saved as a JSON file at a specified output path.\n\n3. **main**: Demonstrates the usage of `summarize_functions_in_directory`. It specifies a directory path containing Python scripts and an output path for the JSON file where function summaries will be written.\n\nThe script relies on the OpenAI client, configured with an API key, to connect and retrieve function summaries. It interacts with the file system to read Python scripts, processes them, and writes summarized descriptions into a JSON file, serving as documentation or analysis tool for the codebase within the specified directory.",
+            "function_information": [
+                {
+                    "function_name": "summarize_functions",
+                    "function_description": "Takes a string of Python code and uses the OpenAI API to summarize all functions, returning a JSON-encoded string containing function names and descriptions."
+                },
+                {
+                    "function_name": "summarize_functions_in_directory",
+                    "function_description": "Walks through the specified directory to find Python files, reads each file's content, summarizes the functions using summarize_functions, and outputs the summaries as a JSON file at the specified output path."
+                },
+                {
+                    "function_name": "main",
+                    "function_description": "Example usage of summarize_functions_in_directory, specifying a directory to summarize and an output path for the summary JSON file."
+                }
+            ]
+        },
+        {
+            "name": "function_descriptions.json"
+        },
+        {
+            "name": "sample_directory",
+            "children": [
+                {
+                    "name": "output",
+                    "children": [
+                        {
+                            "name": "results.txt"
+                        }
+                    ]
+                },
+                {
+                    "name": "scripts",
+                    "children": [
+                        {
+                            "name": "model_training.py",
+                            "file_summary": "The `model_training.py` file is a script focused on operations related to training and evaluating a linear regression model. It uses the `LinearRegression` class from the `scikit-learn` library to perform its tasks. The script defines three primary functions:\n\n1. `train_model(X, y)`: This function takes input features `X` and target values `y`, trains a linear regression model, and returns the trained model.\n\n2. `predict(model, X_new)`: This function uses the trained linear regression model to generate predictions for new input data `X_new`. It returns the array of predictions.\n\n3. `evaluate_model(model, X_test, y_test)`: This function evaluates the performance of the trained model on test data, `X_test` and `y_test`, returning the model's score, which is the coefficient of determination R^2.\n\nThe script depends on external CSV data input and likely requires preprocessing of data to provide it with the `X` and `y` inputs, which might be handled by another script in the project such as `data_processing.py`. Additionally, outputs of the predictions or evaluations might be used by other scripts like those for data visualization or reporting.",
+                            "function_information": [
+                                {
+                                    "function_name": "train_model",
+                                    "function_description": "Trains a Linear Regression model using the provided features (X) and target (y) data, and returns the trained model."
+                                },
+                                {
+                                    "function_name": "predict",
+                                    "function_description": "Generates predictions using a trained Linear Regression model and new input feature data (X_new)."
+                                },
+                                {
+                                    "function_name": "evaluate_model",
+                                    "function_description": "Evaluates the performance of a trained Linear Regression model using test data (X_test and y_test), returning the model's score (coefficient of determination R^2)."
+                                }
+                            ]
+                        },
+                        {
+                            "name": "visualization.py",
+                            "file_summary": "The `visualization.py` script contains functions for visualizing data using Matplotlib. It includes two functions:\n\n1. `plot_data(data)`: Takes a dictionary with keys 'date' and 'value', plotting these as a line graph and displaying it. This function expects that the input data is already prepared in a format suitable for plotting.\n\n2. `save_plot(data, filepath)`: Similar to `plot_data`, but instead of displaying the plot, it saves the plot as an image to the specified file path.\n\nThe script assumes the input data has 'date' and 'value' keys, corresponding to the x-axis and y-axis, respectively. This module is designed to be a part of a data analysis pipeline where data plotting and saving functionality is required. No external files or functions from outside this file are invoked directly within this script.",
+                            "function_information": [
+                                {
+                                    "function_name": "plot_data",
+                                    "function_description": "Plots the data using Matplotlib, displaying a line graph of 'value' over 'date'."
+                                },
+                                {
+                                    "function_name": "save_plot",
+                                    "function_description": "Plots the data using Matplotlib and saves the line graph as an image to the specified file path."
+                                }
+                            ]
+                        },
+                        {
+                            "name": "data_processing.py",
+                            "file_summary": "The `data_processing.py` script is dedicated to managing and preparing datasets for analysis. It uses the pandas library to handle data in CSV format. The script includes three primary functions:\n\n1. `load_data(filepath)`: This function reads a CSV file specified by the `filepath` into a pandas DataFrame, allowing for further data manipulation and analysis.\n\n2. `clean_data(data)`: This function cleans the DataFrame by removing any rows with missing values (NaN) and filtering out rows where the 'value' column is negative, ensuring only valid and relevant data is retained.\n\n3. `save_clean_data(data, filepath)`: This function saves the cleaned DataFrame back to a CSV file at the specified `filepath` without including the index, finalizing the cleaning process and preparing the data for subsequent analysis or modeling steps.\n\nThese functions are essential prerequisites for tasks such as model training and visualization, facilitating a clean and structured dataset for these subsequent processes.",
+                            "function_information": [
+                                {
+                                    "function_name": "load_data",
+                                    "function_description": "Loads data from a CSV file given by 'filepath' into a pandas DataFrame."
+                                },
+                                {
+                                    "function_name": "clean_data",
+                                    "function_description": "Cleans the DataFrame by removing rows with NaN values and ensuring the 'value' column has non-negative entries."
+                                },
+                                {
+                                    "function_name": "save_clean_data",
+                                    "function_description": "Saves the cleaned DataFrame to a CSV file at the specified 'filepath' without writing the index."
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "data",
+                    "children": [
+                        {
+                            "name": "dataset.csv"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

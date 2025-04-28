@@ -1,0 +1,65 @@
+{
+    "name": "python_logic_tester",
+    "is_directory": true,
+    "children": [
+        {
+            "name": "generate_summaries.py",
+            "is_directory": false,
+            "children": []
+        },
+        {
+            "name": "function_descriptions.json",
+            "is_directory": false,
+            "children": []
+        },
+        {
+            "name": "sample_directory",
+            "is_directory": true,
+            "children": [
+                {
+                    "name": "output",
+                    "is_directory": true,
+                    "children": [
+                        {
+                            "name": "results.txt",
+                            "is_directory": false,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "scripts",
+                    "is_directory": true,
+                    "children": [
+                        {
+                            "name": "model_training.py",
+                            "is_directory": false,
+                            "children": []
+                        },
+                        {
+                            "name": "visualization.py",
+                            "is_directory": false,
+                            "children": []
+                        },
+                        {
+                            "name": "data_processing.py",
+                            "is_directory": false,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "data",
+                    "is_directory": true,
+                    "children": [
+                        {
+                            "name": "dataset.csv",
+                            "is_directory": false,
+                            "children": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

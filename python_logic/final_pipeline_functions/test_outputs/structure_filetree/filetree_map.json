@@ -1,0 +1,9 @@
+{
+    "python_logic_tester/generate_summaries.py": "python_logic_tester/scripts/generate_summaries.py",
+    "python_logic_tester/function_descriptions.json": "python_logic_tester/docs/function_descriptions.json",
+    "python_logic_tester/sample_directory/output/results.txt": "python_logic_tester/output/results.txt",
+    "python_logic_tester/sample_directory/scripts/model_training.py": "python_logic_tester/scripts/model_training.py",
+    "python_logic_tester/sample_directory/scripts/visualization.py": "python_logic_tester/scripts/visualization.py",
+    "python_logic_tester/sample_directory/scripts/data_processing.py": "python_logic_tester/scripts/data_processing.py",
+    "python_logic_tester/sample_directory/data/dataset.csv": "python_logic_tester/data/raw/dataset.csv"
+}

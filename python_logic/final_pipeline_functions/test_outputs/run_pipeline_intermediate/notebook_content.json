@@ -1,0 +1,135 @@
+{
+    "cells": [
+        {
+            "source": "# Weather Data Analysis\n\n## Introduction\n\nThis notebook provides a comprehensive analysis of weather data from the years 2018 to 2020. The objective is to read, process, and analyze the data to calculate average temperature and humidity, identify temperature extremes, and visualize trends over time.\n\n---\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "import os\nimport csv\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport logging\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": null
+        },
+        {
+            "source": "## Data Preparation\n\n### Creating Sample Data\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "# Create 'data' directory if it doesn't exist\nif not os.path.exists('data'):\n    os.makedirs('data')\n\n# Sample data for 2018\ndata_2018 = [\n    ['Date', 'Temperature', 'Humidity'],\n    ['2018-01-01', '25', '60'],\n    ['2018-01-02', '28', '65'],\n    ['2018-01-03', '22', '55'],\n]\n\n# Write to CSV file\nwith open('data/weather_2018.csv', 'w', newline='') as f:\n    writer = csv.writer(f)\n    writer.writerows(data_2018)\n\n# Sample data for 2019\ndata_2019 = [\n    ['Date', 'Temperature', 'Humidity'],\n    ['2019-01-01', '24', '58'],\n    ['2019-01-02', '26', '62'],\n    ['2019-01-03', '23', '57'],\n]\n\nwith open('data/weather_2019.csv', 'w', newline='') as f:\n    writer = csv.writer(f)\n    writer.writerows(data_2019)\n\n# Sample data for 2020\ndata_2020 = [\n    ['Date', 'Temperature', 'Humidity'],\n    ['2020-01-01', '27', '66'],\n    ['2020-01-02', '29', '70'],\n    ['2020-01-03', '26', '64'],\n]\n\nwith open('data/weather_2020.csv', 'w', newline='') as f:\n    writer = csv.writer(f)\n    writer.writerows(data_2020)\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": null
+        },
+        {
+            "source": "## Data Reading\n\n### Reading CSV Data\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "def read_csv(file_path):\n    return pd.read_csv(file_path)\n\n# Read data into DataFrames\ndf_2018 = read_csv('data/weather_2018.csv')\ndf_2019 = read_csv('data/weather_2019.csv')\ndf_2020 = read_csv('data/weather_2020.csv')\n\n# Display first few rows\nprint(\"Data 2018:\")\ndisplay(df_2018.head())\nprint(\"Data 2019:\")\ndisplay(df_2019.head())\nprint(\"Data 2020:\")\ndisplay(df_2020.head())\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": null
+        },
+        {
+            "source": "## Data Processing\n\n### Processing Weather Data\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "# Setup logging\nlogging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')\n\ndef to_float(value):\n    try:\n        return float(value)\n    except ValueError:\n        logging.warning(f\"Unable to convert '{value}' to float.\")\n        return None\n\ndef process_weather(df):\n    df['Temperature'] = df['Temperature'].apply(to_float)\n    df['Humidity'] = df['Humidity'].apply(to_float)\n    \n    # Check for missing values\n    if df['Temperature'].isnull().any():\n        logging.warning(\"Missing values detected in Temperature column.\")\n    if df['Humidity'].isnull().any():\n        logging.warning(\"Missing values detected in Humidity column.\")\n    \n    avg_temp = df['Temperature'].mean()\n    avg_humidity = df['Humidity'].mean()\n    \n    return avg_temp, avg_humidity\n\n# Process weather data\navg_temp_2018, avg_humidity_2018 = process_weather(df_2018)\navg_temp_2019, avg_humidity_2019 = process_weather(df_2019)\navg_temp_2020, avg_humidity_2020 = process_weather(df_2020)\n\n# Print averages\nprint(f\"2018 - Average Temperature: {avg_temp_2018:.2f}, Average Humidity: {avg_humidity_2018:.2f}\")\nprint(f\"2019 - Average Temperature: {avg_temp_2019:.2f}, Average Humidity: {avg_humidity_2019:.2f}\")\nprint(f\"2020 - Average Temperature: {avg_temp_2020:.2f}, Average Humidity: {avg_humidity_2020:.2f}\")\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": null
+        },
+        {
+            "source": "## Statistical Analysis\n\n### Calculating Minimum and Maximum Temperatures\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "def get_min_max(df):\n    min_temp = df['Temperature'].min()\n    max_temp = df['Temperature'].max()\n    return min_temp, max_temp\n\n# Get min and max temperatures\nmin_temp_2018, max_temp_2018 = get_min_max(df_2018)\nmin_temp_2019, max_temp_2019 = get_min_max(df_2019)\nmin_temp_2020, max_temp_2020 = get_min_max(df_2020)\n\n# Print min and max temperatures\nprint(f\"2018 - Min Temperature: {min_temp_2018}, Max Temperature: {max_temp_2018}\")\nprint(f\"2019 - Min Temperature: {min_temp_2019}, Max Temperature: {max_temp_2019}\")\nprint(f\"2020 - Min Temperature: {min_temp_2020}, Max Temperature: {max_temp_2020}\")\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": null
+        },
+        {
+            "source": "## Data Visualization\n\n### Temperature Trends Over Time\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "# Add 'Year' column to each DataFrame\ndf_2018['Year'] = 2018\ndf_2019['Year'] = 2019\ndf_2020['Year'] = 2020\n\n# Combine DataFrames\ndf_all = pd.concat([df_2018, df_2019, df_2020], ignore_index=True)\n\n# Convert 'Date' column to datetime\ndf_all['Date'] = pd.to_datetime(df_all['Date'])\n\n# Sort by date\ndf_all = df_all.sort_values('Date')\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": null
+        },
+        {
+            "source": "# Plot Temperature over time\nplt.figure(figsize=(10,6))\nplt.plot(df_all['Date'], df_all['Temperature'], marker='o')\nplt.title('Temperature Over Time')\nplt.xlabel('Date')\nplt.ylabel('Temperature')\nplt.xticks(rotation=45)\nplt.grid(True)\nplt.tight_layout()\nplt.show()\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": null
+        },
+        {
+            "source": "### Temperature Distribution\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "# Histogram of temperatures\nplt.figure(figsize=(8,6))\nplt.hist(df_all['Temperature'].dropna(), bins=10, edgecolor='black')\nplt.title('Distribution of Temperatures')\nplt.xlabel('Temperature')\nplt.ylabel('Frequency')\nplt.grid(True)\nplt.show()\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": null
+        },
+        {
+            "source": "## Conclusion\n\nAverage temperatures and humidity levels were calculated for the years 2018 to 2020. The minimum and maximum temperatures were identified for each year. Visualizations display temperature trends over time and the distribution of temperatures across the dataset.\n\n---\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "## Further Enhancements\n\n- **Error Handling**: Improve robustness by handling missing or malformed data more effectively.\n- **Data Validation**: Implement data validation checks before processing.\n- **Scalability**: Adapt the code to process larger datasets efficiently, possibly integrating parallel processing.\n- **Modular Code**: Refactor code into reusable modules or classes for better maintainability.\n\n---",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        }
+    ],
+    "metadata": {
+        "kernel_info": {
+            "name": "python3"
+        },
+        "language_info": {
+            "name": "python",
+            "version": "3.8.5",
+            "codemirror_mode": "python"
+        }
+    },
+    "nbformat": 4,
+    "nbformat_minor": 5
+}

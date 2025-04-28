@@ -1,0 +1,289 @@
+{
+    "cells": [
+        {
+            "source": "# Data Analysis and Modeling Notebook\n\nThis notebook provides a comprehensive walkthrough of loading, processing, training, and visualizing data using the project's codebase.",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "## Dependencies and Setup",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "# Import necessary libraries\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\n\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.model_selection import train_test_split\n\n# Set up inline plotting\n%matplotlib inline\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 1
+        },
+        {
+            "source": "## Data Handling",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "### Loading Data",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "def load_data(filepath):\n    data = pd.read_csv(filepath)\n    return data\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 2
+        },
+        {
+            "source": "# Specify the file path for the data\ndata_filepath = 'data/raw_data.csv'  # Adjust this path as necessary\n\n# Load the data\ndata = load_data(data_filepath)\n\n# Display the first few rows of the data\ndata.head()",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 3
+        },
+        {
+            "source": "## Data Cleaning",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "### Cleaning Process",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "def clean_data(data):\n    data = data.dropna()\n    data = data[data['value'] >= 0]\n    return data\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 4
+        },
+        {
+            "source": "# Clean the data\ncleaned_data = clean_data(data)\n\n# Display a summary of the cleaned data\ncleaned_data.describe()",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 5
+        },
+        {
+            "source": "## Data Saving",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "### Save Clean Data",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "def save_clean_data(data, filepath):\n    data.to_csv(filepath, index=False)\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 6
+        },
+        {
+            "source": "# Specify the file path to save the cleaned data\ncleaned_data_filepath = 'data/cleaned_data.csv'  # Adjust this path as necessary\n\n# Save the cleaned data\nsave_clean_data(cleaned_data, cleaned_data_filepath)\n\n# Verify that data is saved correctly by loading again\ncleaned_data = load_data(cleaned_data_filepath)\n\ncleaned_data.head()",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 7
+        },
+        {
+            "source": "## Data Exploration and Visualization",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "### Plot Initial Data",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "def plot_data(data):\n    plt.figure(figsize=(10,6))\n    plt.plot(data['date'], data['value'])\n    plt.xlabel('Date')\n    plt.ylabel('Value')\n    plt.title('Value over Time')\n    plt.show()\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 8
+        },
+        {
+            "source": "# Plot the cleaned data\nplot_data(cleaned_data)",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 9
+        },
+        {
+            "source": "## Model Training",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "### Train the Model",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "def train_model(X, y):\n    model = LinearRegression()\n    model.fit(X, y)\n    return model\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 10
+        },
+        {
+            "source": "# Convert 'date' to datetime if not already\ncleaned_data['date'] = pd.to_datetime(cleaned_data['date'])\n\n# Create features\ncleaned_data['date_ordinal'] = cleaned_data['date'].map(pd.Timestamp.toordinal)\n\n# Define features and target\nX = cleaned_data[['date_ordinal']]\ny = cleaned_data['value']\n\n# Split data into training and testing sets\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n\n# Train the model\nmodel = train_model(X_train, y_train)",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 11
+        },
+        {
+            "source": "## Model Evaluation",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "### Generate Predictions",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "def predict(model, X_new):\n    predictions = model.predict(X_new)\n    return predictions\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 12
+        },
+        {
+            "source": "# Generate predictions on the test set\ny_pred = predict(model, X_test)",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 13
+        },
+        {
+            "source": "### Evaluate Performance",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "def evaluate_model(model, X_test, y_test):\n    score = model.score(X_test, y_test)\n    return score\n",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 14
+        },
+        {
+            "source": "# Evaluate the model performance\nscore = evaluate_model(model, X_test, y_test)\nprint(f'Model R\u00b2 Score: {score:.4f}')",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 15
+        },
+        {
+            "source": "## Result Visualization",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "### Visualize Model Outcomes",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "# Prepare data for plotting\nX_test_sorted = X_test.sort_index()\ny_test_sorted = y_test.loc[X_test_sorted.index]\ny_pred_sorted = y_pred[np.argsort(X_test.index)]\n\n# Convert date ordinal back to datetime\ndates = X_test_sorted['date_ordinal'].map(pd.Timestamp.fromordinal)\n\n# Plot Actual vs Predicted values over time\nplt.figure(figsize=(10,6))\nplt.plot(dates, y_test_sorted, color='blue', label='Actual')\nplt.plot(dates, y_pred_sorted, color='red', linestyle='--', label='Predicted')\nplt.xlabel('Date')\nplt.ylabel('Value')\nplt.title('Actual vs Predicted Values Over Time')\nplt.legend()\nplt.show()",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 16
+        },
+        {
+            "source": "## Summarizing Functionality (Optional)",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "### Generate Summaries",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "import os\nimport json\nimport openai\n\ndef summarize_functions(python_file_string):\n    openai.api_key = 'YOUR_API_KEY'  # Replace with your actual API key\n    \n    response = openai.ChatCompletion.create(\n        model=\"gpt-4\",\n        messages=[\n            {\n                \"role\": \"system\",\n                \"content\": \"You are a python code summarizer. You will see python code. You should summarize all functions based on what they do with respect to the whole script.\"\n            },\n            {\n                \"role\": \"user\",\n                \"content\": python_file_string\n            }\n        ],\n        temperature=0,\n        max_tokens=500,\n    )\n    \n    summary = response['choices'][0]['message']['content']\n    return summary\n\ndef summarize_functions_in_directory(directory_path, output_json_path):\n    function_summaries = {}\n\n    # Walk through all files and subdirectories within the directory\n    for root, _, files in os.walk(directory_path):\n        for filename in files:\n            if filename.endswith('.py'):\n                # Get the full file path\n                file_path = os.path.join(root, filename)\n                \n                # Compute the relative path from the root directory\n                relative_path = os.path.relpath(file_path, directory_path)\n                \n                with open(file_path, 'r') as file:\n                    python_file_string = file.read()\n                \n                # Get the function summaries using the summarize_functions function\n                try:\n                    summary = summarize_functions(python_file_string)\n                except Exception as e:\n                    print(f\"Error summarizing {relative_path}: {e}\")\n                    summary = {\"error\": str(e)}\n                \n                # Add the summary to the dictionary with the relative path as the key\n                function_summaries[relative_path] = summary\n\n    # Write the collected summaries to the output JSON file\n    with open(output_json_path, 'w') as json_file:\n        json.dump(function_summaries, json_file, indent=4)\n\n    print(f\"Function summaries have been written to {output_json_path}\")",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 17
+        },
+        {
+            "source": "# Example usage\n\n# Set the directory path containing Python scripts\ndirectory_path = 'scripts'  # Adjust this path as necessary\n\n# Specify the output JSON file path\noutput_json_path = 'function_descriptions.json'\n\n# Summarize functions in the directory\n# Note: Ensure you have replaced 'YOUR_API_KEY' with your actual OpenAI API key before running.\n# This code requires an active internet connection and valid API credentials.\n\nsummarize_functions_in_directory(directory_path, output_json_path)",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "code",
+            "execution_count": 18
+        },
+        {
+            "source": "## Conclusion and Further Directions\n\nIn this notebook, we have loaded, cleaned, and explored the data, trained a Linear Regression model, evaluated its performance, and visualized the results.\n\nFurther improvements could include exploring more complex models, feature engineering, and hyperparameter tuning to improve model performance.",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        },
+        {
+            "source": "**Note:** Ensure that all file paths are correctly specified according to your project's directory structure. Replace `'YOUR_API_KEY'` with your actual OpenAI API key when using the summarization functionality.",
+            "outputs": [],
+            "metadata": {},
+            "cell_type": "markdown",
+            "execution_count": null
+        }
+    ],
+    "metadata": {
+        "kernel_info": {
+            "name": "python3"
+        },
+        "language_info": {
+            "name": "python",
+            "version": "3.8",
+            "codemirror_mode": "python"
+        }
+    },
+    "nbformat": 4,
+    "nbformat_minor": 5
+}

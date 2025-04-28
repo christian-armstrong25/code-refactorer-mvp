@@ -1,0 +1,76 @@
+{
+    "name": "python_logic_tester",
+    "children": [
+        {
+            "name": "data",
+            "children": [
+                {
+                    "name": "raw",
+                    "children": [
+                        {
+                            "name": "dataset.csv",
+                            "children": [],
+                            "is_directory": false
+                        }
+                    ],
+                    "is_directory": true
+                },
+                {
+                    "name": "processed",
+                    "children": [],
+                    "is_directory": true
+                }
+            ],
+            "is_directory": true
+        },
+        {
+            "name": "output",
+            "children": [
+                {
+                    "name": "results.txt",
+                    "children": [],
+                    "is_directory": false
+                }
+            ],
+            "is_directory": true
+        },
+        {
+            "name": "scripts",
+            "children": [
+                {
+                    "name": "data_processing.py",
+                    "children": [],
+                    "is_directory": false
+                },
+                {
+                    "name": "generate_summaries.py",
+                    "children": [],
+                    "is_directory": false
+                },
+                {
+                    "name": "model_training.py",
+                    "children": [],
+                    "is_directory": false
+                },
+                {
+                    "name": "visualization.py",
+                    "children": [],
+                    "is_directory": false
+                }
+            ],
+            "is_directory": true
+        },
+        {
+            "name": "docs",
+            "children": [
+                {
+                    "name": "function_descriptions.json",
+                    "children": [],
+                    "is_directory": false
+                }
+            ],
+            "is_directory": true
+        }
+    ],
+    "is_directory": true
+}

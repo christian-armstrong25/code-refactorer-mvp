@@ -1,0 +1,327 @@
+# Data Analysis and Modeling Notebook
+
+This notebook provides a comprehensive walkthrough of loading, processing, training, and visualizing data using the project's codebase.
+
+---
+
+## Dependencies and Setup
+
+**Code Cell:**
+
+```python
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+
+# Set up inline plotting
+%matplotlib inline
+```
+
+---
+
+## Data Handling
+
+### Loading Data
+
+**Code Cell:**
+
+```python
+def load_data(filepath):
+    data = pd.read_csv(filepath)
+    return data
+```
+
+**Code Cell:**
+
+```python
+# Specify the file path for the data
+data_filepath = 'data/raw_data.csv'  # Adjust this path as necessary
+
+# Load the data
+data = load_data(data_filepath)
+
+# Display the first few rows of the data
+data.head()
+```
+
+---
+
+## Data Cleaning
+
+### Cleaning Process
+
+**Code Cell:**
+
+```python
+def clean_data(data):
+    data = data.dropna()
+    data = data[data['value'] >= 0]
+    return data
+```
+
+**Code Cell:**
+
+```python
+# Clean the data
+cleaned_data = clean_data(data)
+
+# Display a summary of the cleaned data
+cleaned_data.describe()
+```
+
+---
+
+## Data Saving
+
+### Save Clean Data
+
+**Code Cell:**
+
+```python
+def save_clean_data(data, filepath):
+    data.to_csv(filepath, index=False)
+```
+
+**Code Cell:**
+
+```python
+# Specify the file path to save the cleaned data
+cleaned_data_filepath = 'data/cleaned_data.csv'  # Adjust this path as necessary
+
+# Save the cleaned data
+save_clean_data(cleaned_data, cleaned_data_filepath)
+
+# Verify that data is saved correctly by loading again
+cleaned_data = load_data(cleaned_data_filepath)
+
+cleaned_data.head()
+```
+
+---
+
+## Data Exploration and Visualization
+
+### Plot Initial Data
+
+**Code Cell:**
+
+```python
+def plot_data(data):
+    plt.figure(figsize=(10,6))
+    plt.plot(data['date'], data['value'])
+    plt.xlabel('Date')
+    plt.ylabel('Value')
+    plt.title('Value over Time')
+    plt.show()
+```
+
+**Code Cell:**
+
+```python
+# Plot the cleaned data
+plot_data(cleaned_data)
+```
+
+---
+
+## Model Training
+
+### Train the Model
+
+**Code Cell:**
+
+```python
+def train_model(X, y):
+    model = LinearRegression()
+    model.fit(X, y)
+    return model
+```
+
+**Code Cell:**
+
+```python
+# Convert 'date' to datetime if not already
+cleaned_data['date'] = pd.to_datetime(cleaned_data['date'])
+
+# Create features
+cleaned_data['date_ordinal'] = cleaned_data['date'].map(pd.Timestamp.toordinal)
+
+# Define features and target
+X = cleaned_data[['date_ordinal']]
+y = cleaned_data['value']
+
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train the model
+model = train_model(X_train, y_train)
+```
+
+---
+
+## Model Evaluation
+
+### Generate Predictions
+
+**Code Cell:**
+
+```python
+def predict(model, X_new):
+    predictions = model.predict(X_new)
+    return predictions
+```
+
+**Code Cell:**
+
+```python
+# Generate predictions on the test set
+y_pred = predict(model, X_test)
+```
+
+### Evaluate Performance
+
+**Code Cell:**
+
+```python
+def evaluate_model(model, X_test, y_test):
+    score = model.score(X_test, y_test)
+    return score
+```
+
+**Code Cell:**
+
+```python
+# Evaluate the model performance
+score = evaluate_model(model, X_test, y_test)
+print(f'Model R² Score: {score:.4f}')
+```
+
+---
+
+## Result Visualization
+
+### Visualize Model Outcomes
+
+**Code Cell:**
+
+```python
+# Prepare data for plotting
+X_test_sorted = X_test.sort_index()
+y_test_sorted = y_test.loc[X_test_sorted.index]
+y_pred_sorted = y_pred[np.argsort(X_test.index)]
+
+# Convert date ordinal back to datetime
+dates = X_test_sorted['date_ordinal'].map(pd.Timestamp.fromordinal)
+
+# Plot Actual vs Predicted values over time
+plt.figure(figsize=(10,6))
+plt.plot(dates, y_test_sorted, color='blue', label='Actual')
+plt.plot(dates, y_pred_sorted, color='red', linestyle='--', label='Predicted')
+plt.xlabel('Date')
+plt.ylabel('Value')
+plt.title('Actual vs Predicted Values Over Time')
+plt.legend()
+plt.show()
+```
+
+---
+
+## Summarizing Functionality (Optional)
+
+### Generate Summaries
+
+**Code Cell:**
+
+```python
+import os
+import json
+import openai
+
+def summarize_functions(python_file_string):
+    openai.api_key = 'YOUR_API_KEY'  # Replace with your actual API key
+    
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a python code summarizer. You will see python code. You should summarize all functions based on what they do with respect to the whole script."
+            },
+            {
+                "role": "user",
+                "content": python_file_string
+            }
+        ],
+        temperature=0,
+        max_tokens=500,
+    )
+    
+    summary = response['choices'][0]['message']['content']
+    return summary
+
+def summarize_functions_in_directory(directory_path, output_json_path):
+    function_summaries = {}
+
+    # Walk through all files and subdirectories within the directory
+    for root, _, files in os.walk(directory_path):
+        for filename in files:
+            if filename.endswith('.py'):
+                # Get the full file path
+                file_path = os.path.join(root, filename)
+                
+                # Compute the relative path from the root directory
+                relative_path = os.path.relpath(file_path, directory_path)
+                
+                with open(file_path, 'r') as file:
+                    python_file_string = file.read()
+                
+                # Get the function summaries using the summarize_functions function
+                try:
+                    summary = summarize_functions(python_file_string)
+                except Exception as e:
+                    print(f"Error summarizing {relative_path}: {e}")
+                    summary = {"error": str(e)}
+                
+                # Add the summary to the dictionary with the relative path as the key
+                function_summaries[relative_path] = summary
+
+    # Write the collected summaries to the output JSON file
+    with open(output_json_path, 'w') as json_file:
+        json.dump(function_summaries, json_file, indent=4)
+
+    print(f"Function summaries have been written to {output_json_path}")
+```
+
+**Code Cell:**
+
+```python
+# Example usage
+
+# Set the directory path containing Python scripts
+directory_path = 'scripts'  # Adjust this path as necessary
+
+# Specify the output JSON file path
+output_json_path = 'function_descriptions.json'
+
+# Summarize functions in the directory
+# Note: Ensure you have replaced 'YOUR_API_KEY' with your actual OpenAI API key before running.
+# This code requires an active internet connection and valid API credentials.
+
+summarize_functions_in_directory(directory_path, output_json_path)
+```
+
+---
+
+## Conclusion and Further Directions
+
+In this notebook, we have loaded, cleaned, and explored the data, trained a Linear Regression model, evaluated its performance, and visualized the results.
+
+Further improvements could include exploring more complex models, feature engineering, and hyperparameter tuning to improve model performance.
+
+---
+
+**Note:** Ensure that all file paths are correctly specified according to your project's directory structure. Replace `'YOUR_API_KEY'` with your actual OpenAI API key when using the summarization functionality.

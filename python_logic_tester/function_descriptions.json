@@ -1,0 +1,46 @@
+{
+    "scripts/model_training.py": {
+        "function_information": [
+            {
+                "function_name": "train_model",
+                "function_description": "Trains a linear regression model using input features 'X' and target values 'y'. Returns the trained model."
+            },
+            {
+                "function_name": "predict",
+                "function_description": "Generates predictions for new input data 'X_new' using the provided trained model."
+            },
+            {
+                "function_name": "evaluate_model",
+                "function_description": "Evaluates the performance of the trained model on test data 'X_test' and 'y_test', returning the model's score."
+            }
+        ]
+    },
+    "scripts/visualization.py": {
+        "function_information": [
+            {
+                "function_name": "plot_data",
+                "function_description": "Plots a graph of the provided data, using 'date' for the x-axis and 'value' for the y-axis, and displays the plot."
+            },
+            {
+                "function_name": "save_plot",
+                "function_description": "Plots a graph of the provided data, using 'date' for the x-axis and 'value' for the y-axis, and saves the plot to the specified file path."
+            }
+        ]
+    },
+    "scripts/data_processing.py": {
+        "function_information": [
+            {
+                "function_name": "load_data",
+                "function_description": "Loads data from a CSV file specified by the 'filepath' and returns it as a pandas DataFrame."
+            },
+            {
+                "function_name": "clean_data",
+                "function_description": "Cleans the data by removing rows with missing values and filtering out rows where the 'value' column is negative."
+            },
+            {
+                "function_name": "save_clean_data",
+                "function_description": "Saves the cleaned DataFrame to a specified CSV file without including the index column."
+            }
+        ]
+    }
+}

@@ -24,10 +24,10 @@ def handle_files(directory, exclude_dirs=None):
         exclude_dirs = ['my_env', 'my_venv', 'virtual_environment', 'venv', '.venv', 'env', 'envs', 'node_modules']
     # Generalized to store paths to all excluded directories
     excluded_dirs_list = []
-    
+
     # Dictionary to store relative filepath as key and file content as value
     python_files_content = {}
-    
+
     # Function to construct the filetree in JSON format
     def construct_file_tree(directory, root):
         dir_name = os.path.basename(directory)
@@ -60,10 +60,10 @@ def handle_files(directory, exclude_dirs=None):
                     with open(item_path, 'r') as file:
                         python_files_content[relative_path] = file.read()
         return file_tree
-    
+
     # Construct the file tree and ensure the relative paths are from the root
     file_tree_structure = construct_file_tree(directory, directory)
-    
+
     # Return the updated list of excluded directories
     return python_files_content, file_tree_structure, excluded_dirs_list
 
@@ -71,9 +71,9 @@ def handle_files(directory, exclude_dirs=None):
 # Returns: python_files_content (obj)
 def comment_code(python_files_content):
     """
-    Loops through the dictionary, applies the `comment_code` function to each 
+    Loops through the dictionary, applies the `comment_code` function to each
     Python code content string, and returns a new dictionary with the modified content.
-    
+
     :param python_files_content: Dictionary with file paths as keys and Python code as values
     :return: New dictionary with the commented Python code
     """
@@ -181,7 +181,7 @@ def ai_comment(python_file_string):
     if text.startswith('```python\n') and text.endswith('```'):
         # Remove the wrapping backticks and the language identifier
         return text[10:-3].strip()
-    
+
     return text
 
 
@@ -600,7 +600,7 @@ def structure_filetree(filetree, content_object):
                 for path in missing_files:
                     del original_to_final_paths[path]
 
-        
+
     return restructured_tree_json, original_to_final_paths
 
 
@@ -612,7 +612,7 @@ def helper_map_paths(original_tree, restructured_tree):
         is_dir = tree['is_directory']
         current_path = path_so_far + [name]
         print("1a")  # Debug: Processing node in tree
-        
+
         if is_dir:
             print("2a")  # Debug: Node is a directory
             for child in tree.get('children', []):
@@ -1400,13 +1400,13 @@ def helper_filter_code_fields(content_object, files_to_keep=None):
         # If the filepath is not in the files_to_keep list, remove the 'code' field
         if filepath not in files_to_keep:
             filtered_details.pop("code", None)
-        
+
         # Remove 'referenced_filepaths' and 'updated_references' for all files
         filtered_details.pop("referenced_filepaths", None)
         filtered_details.pop("updated_references", None)
 
         filtered_content[filepath] = filtered_details
-    
+
     return filtered_content
 
 # Takes in: content_object, filetree_object, notebook_content_json (str)
@@ -1510,7 +1510,7 @@ def helper_add_excluded_dirs(excluded_dirs, original_dir, output_directory_path,
             print(f"Destination {dst_excluded_path} already exists, skipping copy.")
         else:
             shutil.copytree(src_excluded_path, dst_excluded_path)
-            
+
 def helper_create_path_mapping(base_dir, filetree, excluded_dirs=[]):
     # Normalize excluded directories
     excluded_dirs = [os.path.normpath(d) for d in excluded_dirs]
@@ -1680,7 +1680,7 @@ def save_intermediate_output(output, step_name, intermediate_paths, file_format=
     except Exception as e:
         print(f"Failed to save {step_name} output: {e}")
 
-def run_full_pipeline_generator(input_directory, output_directory, generate_notebook=True, 
+def run_full_pipeline_generator(input_directory, output_directory, generate_notebook=True,
                                 intermediate_outputs=False, intermediate_paths=None):
     def try_step(step_function, *args, **kwargs):
         """Attempts a pipeline step once and retries on failure."""
@@ -1702,9 +1702,9 @@ def run_full_pipeline_generator(input_directory, output_directory, generate_note
     python_files_content, file_tree_structure, excluded_dirs = result
     if intermediate_outputs:
         save_intermediate_output(
-            {"python_files_content": python_files_content, "file_tree_structure": file_tree_structure}, 
-            "step_1_importing_files", 
-            intermediate_paths, 
+            {"python_files_content": python_files_content, "file_tree_structure": file_tree_structure},
+            "step_1_importing_files",
+            intermediate_paths,
             'json'
         )
 
@@ -1748,9 +1748,9 @@ def run_full_pipeline_generator(input_directory, output_directory, generate_note
     organized_file_tree, filetree_map = result
     if intermediate_outputs:
         save_intermediate_output(
-            {"organized_file_tree": organized_file_tree, "filetree_map": filetree_map}, 
-            "step_6_generating_filetree", 
-            intermediate_paths, 
+            {"organized_file_tree": organized_file_tree, "filetree_map": filetree_map},
+            "step_6_generating_filetree",
+            intermediate_paths,
             'json'
         )
 
@@ -1775,12 +1775,13 @@ def run_full_pipeline_generator(input_directory, output_directory, generate_note
     print("(9/10) Outputting files...")
     time.sleep(0.1)
     try_step(
-        construct_directory, 
-        input_directory, 
-        python_files_content, 
-        organized_file_tree, 
-        output_directory, 
+        construct_directory,
+        input_directory,
+        python_files_content,
+        organized_file_tree,
+        output_directory,
         notebook_content,
         excluded_dirs=excluded_dirs
     )
     print("(10/10) All done")
+    
